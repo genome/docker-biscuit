@@ -15,3 +15,14 @@ RUN wget https://github.com/samtools/htslib/releases/download/1.3.2/htslib-1.3.2
     make install && \
     cp $HTSLIB_INSTALL_DIR/lib/libhts.so* /usr/lib/
 
+#################
+#Sambamba v0.6.4#
+#################
+
+RUN mkdir /opt/sambamba/ \
+    && wget https://github.com/lomereiter/sambamba/releases/download/v0.6.4/sambamba_v0.6.4_linux.tar.bz2 \
+    && tar --extract --bzip2 --directory=/opt/sambamba --file=sambamba_v0.6.4_linux.tar.bz2 \
+    && ln -s /opt/sambamba/sambamba_v0.6.4 /usr/bin/sambamba
+   ADD sambamba_merge /usr/bin/
+   RUN chmod +x /usr/bin/sambamba_merge
+
