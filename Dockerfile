@@ -32,6 +32,27 @@ RUN mkdir /opt/sambamba/ \
    RUN chmod +x /usr/bin/sambamba_merge
 
 
+################
+#Samtools 1.3.1#
+################
+   ENV SAMTOOLS_INSTALL_DIR=/opt/samtools
+
+   WORKDIR /tmp
+   RUN wget https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 && \
+       tar --bzip2 -xf samtools-1.3.1.tar.bz2
+
+   WORKDIR /tmp/samtools-1.3.1
+   RUN ./configure --with-htslib=$HTSLIB_INSTALL_DIR --prefix=$SAMTOOLS_INSTALL_DIR && \
+       make && \
+       make install
+
+   WORKDIR /
+   RUN rm -rf /tmp/samtools-1.3.1
+
+
+
+
+
 ##########
 #Bedtools#
 ##########
