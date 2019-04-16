@@ -18,7 +18,7 @@ function biscuitQC
   done
 
   echo "Running."
-  set -xe
+  set -xeou pipefail
 
   ###################################
   ## CpG retention distribution
@@ -34,7 +34,7 @@ function biscuitQC
 input_vcf="<unset>"
 
 function usage {
-  >&2 echo "Usage: Bisulfite_QC_CpGretentiondistribution.sh input_vcf input_bam referecnce_genome setup_file"
+  >&2 echo "Usage: Bisulfite_QC_CpGretentiondistribution.sh input_vcf input_bam reference_genome setup_file"
   exit 1;
 }
 

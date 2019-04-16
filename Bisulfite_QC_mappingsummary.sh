@@ -18,7 +18,7 @@ function biscuitQC
   done
 
   echo "Running."
-  set -xe
+  set -xeou pipefail
 
   ####################
   ## mapping_summary
@@ -39,7 +39,7 @@ function biscuitQC
 input_vcf="<unset>"
 
 function usage {
-  >&2 echo "Usage: Bisulfite_QC_mappingsummary.sh input_vcf input_bam referecnce_genome setup_file"
+  >&2 echo "Usage: Bisulfite_QC_mappingsummary.sh input_vcf input_bam reference_genome setup_file"
   exit 1;
 }
 
