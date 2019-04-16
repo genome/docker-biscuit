@@ -6,6 +6,11 @@ MAINTAINER "Chris Miller" <c.a.miller@wustl.edu>
 ####################
 RUN cd /opt && \
     git clone https://github.com/zwdzwd/biscuit.git
+## Adding QC_scripts
+ADD Bisulfite_QC_bisulfiteconversion.sh /opt/biscuit/scripts
+ADD Bisulfite_QC_Coveragestats.sh /opt/biscuit/scripts
+ADD Bisulfite_QC_CpGretentiondistribution.sh /opt/biscuit/scripts
+ADD Bisulfite_QC_mappingsummary.sh /opt/biscuit/scripts
 
 ##############
 #HTSlib 1.3.2#
@@ -30,6 +35,27 @@ RUN mkdir /opt/sambamba/ \
     && ln -s /opt/sambamba/sambamba_v0.6.4 /usr/bin/sambamba
    ADD sambamba_merge /usr/bin/
    RUN chmod +x /usr/bin/sambamba_merge
+
+
+################
+#Samtools 1.3.1#
+################
+   ENV SAMTOOLS_INSTALL_DIR=/opt/samtools
+
+   WORKDIR /tmp
+   RUN wget https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 && \
+       tar --bzip2 -xf samtools-1.3.1.tar.bz2
+
+   WORKDIR /tmp/samtools-1.3.1
+   RUN ./configure --with-htslib=$HTSLIB_INSTALL_DIR --prefix=$SAMTOOLS_INSTALL_DIR && \
+       make && \
+       make install
+
+   WORKDIR /
+   RUN rm -rf /tmp/samtools-1.3.1
+
+
+
 
 
 ##########
