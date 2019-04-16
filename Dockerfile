@@ -6,6 +6,11 @@ MAINTAINER "Chris Miller" <c.a.miller@wustl.edu>
 ####################
 RUN cd /opt && \
     git clone https://github.com/zwdzwd/biscuit.git
+## Adding QC_scripts
+ADD Bisulfite_QC_bisulfiteconversion.sh /opt/biscuit/scripts
+ADD Bisulfite_QC_Coveragestats.sh /opt/biscuit/scripts
+ADD Bisulfite_QC_CpGretentiondistribution.sh /opt/biscuit/scripts
+ADD Bisulfite_QC_mappingsummary.sh /opt/biscuit/scripts
 
 ##############
 #HTSlib 1.3.2#
