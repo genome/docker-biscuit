@@ -125,11 +125,6 @@ set -- "${@:1:$(($#-1))}"
 input_vcf="${@: -1}"
 set -- "${@:1:$(($#-1))}"
 
-if [[ ! -f "$setup_file" ]]; then
-  echo "Setup file missing: $setup_file.";
-  exit 1;
-fi
-
 if [[ ! -f "${BISCUIT_REFERENCE}.fai" ]]; then
   >&2 echo "Cannot locate fai-indexed reference: ${BISCUIT_REFERENCE}.fai"
   >&2 echo "Please make sure the directory containing the Reference genome file has the fai file.";
