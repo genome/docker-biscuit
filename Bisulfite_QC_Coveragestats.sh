@@ -144,6 +144,18 @@ BISCUIT_GENE="$setup_file/genes.bed.gz"
 BISCUIT_TOPGC_BED="$setup_file/windows100bp.gc_content.top10p.bed.gz"
 ## locations for the bottom 100bp bins in GC content
 BISCUIT_BOTGC_BED="$setup_file/windows100bp.gc_content.bot10p.bed.gz"
+### QC operations to perform ###
+export BISCUIT_QC_BASECOV=true
+export BISCUIT_QC_DUPLICATE=true
+export BISCUIT_QC_CPGCOV=true
+export BISCUIT_QC_CPGDIST=true
+export BISCUIT_QC_CGICOV=true
+export BISCUIT_QC_UNIFORMITY=true
+export BISCUIT_QC_CPGUNIF=true
+export BISCUIT_QC_BSCONV=true
+export BISCUIT_QC_CGICOV=true
+export BISCUIT_QC_MAPPING=true
+export BISCUIT_QC_BETAS=true
 
 >&2 echo "## Running BISCUIT QC script with following configuration ##"
 >&2 echo "=============="
