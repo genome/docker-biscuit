@@ -34,7 +34,7 @@ function biscuitQC
 input_vcf="<unset>"
 
 function usage {
-  >&2 echo "Usage: Bisulfite_QC_CpGretentiondistribution.sh input_vcf input_bam reference_genome setup_file"
+  >&2 echo "Usage: Bisulfite_QC_CpGretentiondistribution.sh input_vcf input_bam reference_genome QCannotation"
   exit 1;
 }
 
@@ -59,7 +59,19 @@ if [[ ! -f "${BISCUIT_REFERENCE}.fai" ]]; then
   exit 1;
 fi
 
-source "$setup_file"
+BISCUIT_CPGBED="$setup_file/cpg.bed.gz"
+## CpG islands
+BISCUIT_CGIBED="$setup_file/cgi.bed.gz"
+## repeat masker bed file
+BISCUIT_RMSK="$setup_file/rmsk.bed.gz"
+## merged exon bed file
+BISCUIT_EXON="$setup_file/exon.bed.gz"
+## genes
+BISCUIT_GENE="$setup_file/genes.bed.gz"
+## locations for the top 100bp bins in GC content
+BISCUIT_TOPGC_BED="$setup_file/windows100bp.gc_content.top10p.bed.gz"
+## locations for the bottom 100bp bins in GC content
+BISCUIT_BOTGC_BED="$setup_file/windows100bp.gc_content.bot10p.bed.gz"
 
 >&2 echo "## Running BISCUIT QC script with following configuration ##"
 >&2 echo "=============="
