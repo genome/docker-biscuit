@@ -1,16 +1,27 @@
-FROM zhouwanding/biscuit_v0.3.8
+FROM ubuntu:latest
 MAINTAINER "Chris Miller" <c.a.miller@wustl.edu>
 
-####################
-#Biscuit QC scripts#
-####################
-RUN cd /opt && \
-    git clone https://github.com/zwdzwd/biscuit.git
-## Adding QC_scripts
-ADD Bisulfite_QC_bisulfiteconversion.sh /opt/biscuit/scripts
-ADD Bisulfite_QC_Coveragestats.sh /opt/biscuit/scripts
-ADD Bisulfite_QC_CpGretentiondistribution.sh /opt/biscuit/scripts
-ADD Bisulfite_QC_mappingsummary.sh /opt/biscuit/scripts
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update -y && \
+    apt-get install build-essential libncurses5-dev zlib1g-dev wget git -y
+
+##################
+# Biscuit 0.3.16 #
+##################
+RUN mkdir /opt/biscuit_binary && cd /opt/biscuit_binary && \
+    wget https://github.com/huishenlab/biscuit/releases/download/v0.3.16.20200420/biscuit_0_3_16_linux_amd64 && \
+    ln -s /opt/biscuit_binary/biscuit_0_3_16_linux_amd64 biscuit && ln -s /opt/biscuit_binary/biscuit_0_3_16_linux_amd64 /usr/bin/biscuit
+
+###############
+# Flexbar 3.5 #
+###############
+
+RUN mkdir -p /opt/flexbar \
+    && cd /opt/ \
+    && wget https://github.com/seqan/flexbar/releases/download/v3.5.0/flexbar-3.5.0-linux.tar.gz \
+    && tar -xzvf flexbar-3.5.0-linux.tar.gz \
+    && mv -f flexbar-3.5.0-linux flexbar
 
 ##############
 #HTSlib 1.3.2#
@@ -41,43 +52,48 @@ RUN mkdir /opt/sambamba/ \
 #Samtools 1.3.1#
 ################
    ENV SAMTOOLS_INSTALL_DIR=/opt/samtools
-
-   WORKDIR /tmp
-   RUN wget https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 && \
-       tar --bzip2 -xf samtools-1.3.1.tar.bz2
-
-   WORKDIR /tmp/samtools-1.3.1
-   RUN ./configure --with-htslib=$HTSLIB_INSTALL_DIR --prefix=$SAMTOOLS_INSTALL_DIR && \
+   RUN cd /tmp && wget https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 && \
+       tar --bzip2 -xf samtools-1.3.1.tar.bz2 && cd /tmp/samtools-1.3.1 && \
+       ./configure --with-htslib=$HTSLIB_INSTALL_DIR --prefix=$SAMTOOLS_INSTALL_DIR && \
        make && \
-       make install
-
-   WORKDIR /
-   RUN rm -rf /tmp/samtools-1.3.1
-
-
-
-
+       make install && \
+       cd / && rm -rf /tmp/samtools-1.3.1
 
 ##########
 #Bedtools#
 ##########
 
-ARG PACKAGE_VERSION=2.27.1
-ARG BUILD_PACKAGES="git openssl python build-essential zlib1g-dev"
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && \
-    apt-get install --yes \
-              $BUILD_PACKAGES && \
-    cd /tmp && \
-    git clone https://github.com/arq5x/bedtools2.git && \
-    cd bedtools2 && \
-    git checkout v$PACKAGE_VERSION && \
-    make && \
-    mv bin/* /usr/local/bin && \
-    cd / && \
-    rm -rf /tmp/* && \
-    apt remove --purge --yes \
-              $BUILD_PACKAGES && \
-    apt autoremove --purge --yes && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN mkdir /opt/bedtools && wget https://github.com/arq5x/bedtools2/releases/download/v2.29.2/bedtools.static.binary && \
+    ln -s /opt/bedtools/bedtools.static.binary /usr/bin/bedtools
+
+# ARG PACKAGE_VERSION=2.27.1
+# ARG BUILD_PACKAGES="git openssl python build-essential zlib1g-dev"
+# ARG DEBIAN_FRONTEND=noninteractiveq
+# RUN apt-get update && \
+#     apt-get install --yes \
+#               $BUILD_PACKAGES && \
+#     cd /tmp && \
+#     git clone https://github.com/arq5x/bedtools2.git && \
+#     cd bedtools2 && \
+#     git checkout v$PACKAGE_VERSION && \
+#     make && \
+#     mv bin/* /usr/local/bin && \
+#     cd / && \
+#     rm -rf /tmp/* && \
+#     apt remove --purge --yes \
+#               $BUILD_PACKAGES && \
+#     apt autoremove --purge --yes && \
+#     apt clean && \
+#     rm -rf /var/lib/apt/lists/*
+
+####################
+#Biscuit QC scripts#
+####################
+RUN cd /opt && \
+    git clone https://github.com/zwdzwd/biscuit.git
+## Adding QC_scripts
+ADD Bisulfite_QC_bisulfiteconversion.sh /opt/biscuit/scripts
+ADD Bisulfite_QC_Coveragestats.sh /opt/biscuit/scripts
+ADD Bisulfite_QC_CpGretentiondistribution.sh /opt/biscuit/scripts
+ADD Bisulfite_QC_mappingsummary.sh /opt/biscuit/scripts
+
