@@ -105,26 +105,6 @@ RUN mkdir /opt/bedtools && cd /opt/bedtools && wget https://github.com/arq5x/bed
     chmod +x /opt/bedtools/bedtools.static.binary && \
     ln -s /opt/bedtools/bedtools.static.binary /usr/bin/bedtools
 
-# ARG PACKAGE_VERSION=2.27.1
-# ARG BUILD_PACKAGES="git openssl python build-essential zlib1g-dev"
-# ARG DEBIAN_FRONTEND=noninteractiveq
-# RUN apt-get update && \
-#     apt-get install --yes \
-#               $BUILD_PACKAGES && \
-#     cd /tmp && \
-#     git clone https://github.com/arq5x/bedtools2.git && \
-#     cd bedtools2 && \
-#     git checkout v$PACKAGE_VERSION && \
-#     make && \
-#     mv bin/* /usr/local/bin && \
-#     cd / && \
-#     rm -rf /tmp/* && \
-#     apt remove --purge --yes \
-#               $BUILD_PACKAGES && \
-#     apt autoremove --purge --yes && \
-#     apt clean && \
-#     rm -rf /var/lib/apt/lists/*
-
 ####################
 #Biscuit QC scripts#
 ####################
@@ -135,6 +115,3 @@ ADD Bisulfite_QC_bisulfiteconversion.sh /opt/biscuit/scripts
 ADD Bisulfite_QC_Coveragestats.sh /opt/biscuit/scripts
 ADD Bisulfite_QC_CpGretentiondistribution.sh /opt/biscuit/scripts
 ADD Bisulfite_QC_mappingsummary.sh /opt/biscuit/scripts
-
-RUN apt-get update -y && \
-    apt-get install 
